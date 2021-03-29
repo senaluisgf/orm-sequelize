@@ -13,4 +13,4 @@ app.get('/teste', (req, res) => {
         .send({ message: 'Teste funcionando!' })
 });
 
-app.listen(port);
+app.listen(port, (req, res) => console.log('Servidor escutando na porta '+ port));
