@@ -3,6 +3,7 @@ const PessoaController = require('../controllers/PessoaController')
 
 const router = Router()
 
-router.get('/pessoas', PessoaController.pegarTodasPessoas)
+router.get('/pessoas', PessoaController.pegarTodasAsPessoas)
+router.get('/pessoas/:pessoaId', PessoaController.pegarUmaPessoa)
 
 module.exports = router
