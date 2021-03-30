@@ -27,6 +27,14 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      {
+        nome: 'Reginaldo Barros',
+        ativo: 0,
+        email: 'reginaldo@icomp.ufam.edu.br',
+        role: 'docente',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
     ], {});
   },
 
