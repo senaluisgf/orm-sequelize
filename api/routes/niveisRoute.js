@@ -8,5 +8,6 @@ router.get('/niveis', NivelController.pegarTodosOsNiveis)
 router.get('/niveis/:nivelId', NivelController.pegarUmNivel)
 router.put('/niveis/:nivelId', NivelController.alterarUmNivel)
 router.delete('/niveis/:nivelId', NivelController.deletarUmNivel)
+router.post('/niveis/:nivelId/restaura', NivelController.restaurarUmNivel)
 
 module.exports = router
