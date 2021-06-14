@@ -8,6 +8,7 @@ router.get('/pessoas', PessoaController.pegarTodasAsPessoas)
 router.get('/pessoas/:pessoaId', PessoaController.pegarUmaPessoa)
 router.put('/pessoas/:pessoaId', PessoaController.alterarUmaPessoa)
 router.delete('/pessoas/:pessoaId', PessoaController.deletarUmaPessoa)
+router.post('/pessoas/:pessoaId/restaura', PessoaController.restaurarUmaPessoa)
 
 // Matriculas routes
 router.post('/pessoas/:pessoaId/matriculas', PessoaController.criarUmaMatricula)

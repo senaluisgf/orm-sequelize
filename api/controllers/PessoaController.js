@@ -75,6 +75,22 @@ class PessoaController {
         }
     }
 
+    static async restaurarUmaPessoa(req, res){
+        const { pessoaId } = req.params
+        try{
+            await database.Pessoas.restore({
+                where: {
+                    id: Number(pessoaId)
+                }
+            })
+            return res
+                .status(200)
+                .json({message: `pessoa com id ${pessoaId} foi restaurada`})
+        } catch(err){
+            return res.status(500).json(error.message)
+        }
+    }
+
     // MATRICULAS METHODS
 
     static async criarUmaMatricula(req, res){
