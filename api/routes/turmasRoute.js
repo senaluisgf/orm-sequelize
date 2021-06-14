@@ -8,5 +8,6 @@ router.get('/turmas', TurmaController.pegarTodasAsTurmas)
 router.get('/turmas/:turmaId', TurmaController.pegarUmaTurma)
 router.put('/turmas/:turmaId', TurmaController.alterarUmaTurma)
 router.delete('/turmas/:turmaId', TurmaController.deletarUmaTurma)
+router.post('/turmas/:turmaId/restaura', TurmaController.restaurarUmaTurma)
 
 module.exports = router
