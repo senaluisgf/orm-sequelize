@@ -23,6 +23,17 @@ class PessoaController {
         }
     }
 
+    static async pegarPessoasInativas(req, res){
+        try{
+            const pessoasInativas = await database.Pessoas.scope('inativos').findAll()
+            return res
+                .status(200)
+                .json(pessoasInativas)
+        } catch(err){
+            return res.status(500).JSON(err.message)
+        }
+    }
+
     static async pegarTodasAsPessoas(req, res){
         try{
             const todasAsPessoas = await database.Pessoas.scope('todos').findAll();

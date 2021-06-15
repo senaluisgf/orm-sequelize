@@ -46,7 +46,8 @@ module.exports = (sequelize, DataTypes) => {
       where: { ativo: true }
     },
     scopes: {
-      todos: { where: {} }
+      todos: { where: {} },
+      inativos: { where: { ativo: false } }
     }
   });
   return Pessoas;
