@@ -200,6 +200,41 @@ class PessoaController {
                 .json(err.message)
         }
     }
+
+    static async pegarMatriculasConfirmadas(req, res){ //modo que nao checa se o usuario existe no sistema
+        const { pessoaId } = req.params
+        try{
+            const matriculas = await database.Matriculas.findAll({
+                where: {
+                    estudante_id: Number(pessoaId),
+                    status: 'Confirmado'
+                }
+            })
+
+            return res
+                .status(200)
+                .json(matriculas)
+        } catch(err){
+            return res.status(500).json(err.message)
+        }
+    }
+
+    static async pegarMatriculasCanceladas(req, res){ //melhor jeito de fazer correlação pois há uma checagem de usuario
+        const { pessoaId } = req.params
+        try{
+            const pessoa = await database.Pessoas.findOne({ where: {id: Number(pessoaId) } })
+            if(pessoa){
+                const matriculas = await pessoa.getMatriculasCanceladas()
+                return res
+                    .status(200)
+                    .json(matriculas)
+            } else {
+                return res.status(404).json({error: 'usuário não cadastrado'})
+            }
+        } catch(err){
+            return res.status(500).json(err.message)
+        }
+    }
 }
 
 module.exports = PessoaController
