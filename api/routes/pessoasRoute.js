@@ -12,6 +12,8 @@ router.put('/pessoas/:pessoaId', PessoaController.alterarUmaPessoa)
 router.delete('/pessoas/:pessoaId', PessoaController.deletarUmaPessoa)
 router.post('/pessoas/:pessoaId/restaura', PessoaController.restaurarUmaPessoa)
 
+router.post('/pessoas/:pessoaId/cancela', PessoaController.cancelarPessoa)
+
 // Matriculas routes
 router.post('/pessoas/:pessoaId/matriculas', PessoaController.criarUmaMatricula)
 router.get('/pessoas/:pessoaId/matriculas/', PessoaController.pegarMatriculas)
