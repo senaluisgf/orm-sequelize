@@ -1,4 +1,3 @@
-database = require('../models')
 const { NiveisService } = require('../services')
 const niveisService = new NiveisService()
 
