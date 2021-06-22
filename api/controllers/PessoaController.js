@@ -1,21 +1,23 @@
 const database = require('../models')
 const Sequelize = require('sequelize')
+const { PessoaService } = require('../services')
+const pessoaService = new PessoaService()
 
 class PessoaController {
 
     static async criarPessoa(req, res){
         const novaPessoa = req.body
         try{
-            const novaPessoaCriada = await database.Pessoas.create(novaPessoa)
+            const novaPessoaCriada = await pessoaService.criaUmRegistro(novaPessoa)
             return res.status(201).json(novaPessoaCriada)
         } catch(error){
             return res.status(500).json(error.message)
         }
     }
 
-    static async pegarPessoasAtivas(req, res){
+    static async pegarTodasPessoas(req, res){
         try{
-            const pessoasAtivas = await database.Pessoas.findAll();
+            const pessoasAtivas = await pessoaService.pegaTodosRegistros();
             return res
                 .status(200)
                 .json(pessoasAtivas);
@@ -35,9 +37,9 @@ class PessoaController {
         }
     }
 
-    static async pegarTodasAsPessoas(req, res){
+    static async pegarPessoasAtivas(req, res){
         try{
-            const todasAsPessoas = await database.Pessoas.scope('todos').findAll();
+            const todasAsPessoas = await database.Pessoas.scope('ativos').findAll();
             return res
                 .status(200)
                 .json(todasAsPessoas);
@@ -65,19 +67,7 @@ class PessoaController {
         const { pessoaId } = req.params;
         const alteracoes = req.body
         try{
-            await database.Pessoas.update(
-                alteracoes,
-                {
-                    where: {
-                        id: Number(pessoaId)
-                    }
-                }
-            )
-            const pessoaAlterada = await database.Pessoas.findOne({
-                where: {
-                    id: Number(pessoaId)
-                }
-            })
+            const pessoaAlterada = await pessoaService.alteraUmRegistro(pessoaId, alteracoes)
             return res.status(200).json(pessoaAlterada)
         } catch(error){
             return res.status(500).json(error.message)
@@ -87,11 +77,7 @@ class PessoaController {
     static async deletarUmaPessoa(req, res){
         const { pessoaId } = req.params
         try{
-            await database.Pessoas.destroy({
-                where: {
-                    id: Number(pessoaId)
-                }
-            })
+            await pessoaService.deletaUmRegistro(pessoaId)
             return res.status(204).json()
         } catch( error){
             return res.status(500).json(error.message)

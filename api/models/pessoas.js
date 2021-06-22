@@ -43,10 +43,10 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Pessoas',
     paranoid: true,
     defaultScope: {
-      where: { ativo: true }
+      where: {}
     },
     scopes: {
-      todos: { where: {} },
+      ativos: { where: {ativo: true } },
       inativos: { where: { ativo: false } }
     }
   });
