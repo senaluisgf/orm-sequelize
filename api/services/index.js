@@ -1,5 +1,5 @@
-const PessoaService = require('./PessoaService')
+const PessoasService = require('./PessoasService')
 
 module.exports = {
-    PessoaService
+    PessoasService
 }

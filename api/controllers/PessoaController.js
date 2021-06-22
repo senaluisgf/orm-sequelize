@@ -1,14 +1,14 @@
 const database = require('../models')
 const Sequelize = require('sequelize')
-const { PessoaService } = require('../services')
-const pessoaService = new PessoaService()
+const { PessoasService } = require('../services')
+const pessoasService = new PessoasService()
 
 class PessoaController {
 
     static async criarPessoa(req, res){
         const novaPessoa = req.body
         try{
-            const novaPessoaCriada = await pessoaService.criaUmRegistro(novaPessoa)
+            const novaPessoaCriada = await pessoasService.criaUmRegistro(novaPessoa)
             return res.status(201).json(novaPessoaCriada)
         } catch(error){
             return res.status(500).json(error.message)
@@ -17,7 +17,7 @@ class PessoaController {
 
     static async pegarTodasPessoas(req, res){
         try{
-            const pessoasAtivas = await pessoaService.pegaTodosRegistros();
+            const pessoasAtivas = await pessoasService.pegaTodosRegistros();
             return res
                 .status(200)
                 .json(pessoasAtivas);
@@ -67,7 +67,7 @@ class PessoaController {
         const { pessoaId } = req.params;
         const alteracoes = req.body
         try{
-            const pessoaAlterada = await pessoaService.alteraUmRegistro(pessoaId, alteracoes)
+            const pessoaAlterada = await pessoasService.alteraUmRegistro(pessoaId, alteracoes)
             return res.status(200).json(pessoaAlterada)
         } catch(error){
             return res.status(500).json(error.message)
@@ -77,7 +77,7 @@ class PessoaController {
     static async deletarUmaPessoa(req, res){
         const { pessoaId } = req.params
         try{
-            await pessoaService.deletaUmRegistro(pessoaId)
+            await pessoasService.deletaUmRegistro(pessoaId)
             return res.status(204).json()
         } catch( error){
             return res.status(500).json(error.message)
