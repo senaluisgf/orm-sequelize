@@ -28,7 +28,7 @@ class PessoaController {
 
     static async pegarPessoasInativas(req, res){
         try{
-            const pessoasInativas = await database.Pessoas.scope('inativos').findAll()
+            const pessoasInativas = await pessoasService.pegaPessoasInativas()
             return res
                 .status(200)
                 .json(pessoasInativas)
@@ -39,7 +39,7 @@ class PessoaController {
 
     static async pegarPessoasAtivas(req, res){
         try{
-            const todasAsPessoas = await database.Pessoas.scope('ativos').findAll();
+            const todasAsPessoas = await pessoasService.pegaPessoasAtivas();
             return res
                 .status(200)
                 .json(todasAsPessoas);
@@ -52,11 +52,7 @@ class PessoaController {
         const { pessoaId } = req.params
 
         try{
-            const umaPessoa = await database.Pessoas.findOne({
-                where: {
-                    id: Number(pessoaId)
-                }
-            })
+            const umaPessoa = await pessoasService.pegaUmRegistro(pessoaId)
             return res.status(200).json(umaPessoa)
         } catch(error){
             return res.status(500).json(error.message)
@@ -87,11 +83,7 @@ class PessoaController {
     static async restaurarUmaPessoa(req, res){
         const { pessoaId } = req.params
         try{
-            await database.Pessoas.restore({
-                where: {
-                    id: Number(pessoaId)
-                }
-            })
+            await pessoasService.restauraPessoa(pessoaId)
             return res
                 .status(200)
                 .json({message: `pessoa com id ${pessoaId} foi restaurada`})
