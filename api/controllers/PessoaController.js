@@ -237,7 +237,7 @@ class PessoaController {
         try{
             await database.sequelize.transaction(async cancelaPessoa => {
                 await database.Pessoas.update(
-                    { ativo: true },
+                    { ativo: false },
                     { 
                         where: { id: Number(pessoaId) }
                     },
