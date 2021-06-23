@@ -4,6 +4,7 @@ const Services = require('./Services')
 class PessoasService extends Services{
     constructor(){
         super('Pessoas')
+        this.matriculas = new Services('Matriculas')
     }
 
     async pegaPessoasInativas(){
@@ -24,6 +25,29 @@ class PessoasService extends Services{
                 id: Number(pessoaId)
             }
         })
+    }
+
+    //Metodos referentes a tabela de matrículas
+    async pegaMatriculas(where={}){
+        return await database.Matriculas.findAll({where:{...where}})
+    }
+
+
+    async pegaUmaMatricula(where={}){
+        return await database.Matriculas.findOne({where:{...where}})
+    }
+
+    async alteraUmaMatricula(novaMatricula, where={}){
+        await database.Matriculas.update(novaMatricula, {where:{...where}})
+        return this.pegaUmaMatricula({...where})
+    }
+
+    async deletaUmaMatricula(where={}){
+        return await database.Matriculas.destroy({where:{...where}})
+    }
+
+    async restauraMatricula(where={}){
+        return database.Matriculas.restore({where:{...where}})
     }
 }
 

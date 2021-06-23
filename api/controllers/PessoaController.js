@@ -98,7 +98,7 @@ class PessoaController {
         const { pessoaId } = req.params
         const novaMatricula = { ...req.body, estudante_id: Number(pessoaId) }
         try{
-            const novaMatriculaCriada = await database.Matriculas.create(novaMatricula)
+            const novaMatriculaCriada = await pessoasService.matriculas.criaUmRegistro(novaMatricula)
             return res.status(201).json(novaMatriculaCriada)
         } catch(error){
             return res.status(500).json(error.message)
@@ -108,11 +108,7 @@ class PessoaController {
     static async pegarMatriculas(req, res){
         const { pessoaId } = req.params
         try{
-            const matriculas = await database.Matriculas.findAll({
-                where: {
-                    estudante_id: Number(pessoaId)
-                }
-            })
+            const matriculas = await pessoasService.pegaMatriculas({estudante_id: Number(pessoaId)})
             return res.status(200).json(matriculas)
         } catch(error){
             return res.status(500).json(error.message)
@@ -122,12 +118,7 @@ class PessoaController {
     static async pegarUmaMatricula(req, res){
         const { pessoaId, matriculaId } = req.params
         try{
-            const matricula = await database.Matriculas.findOne({
-                where: {
-                    id: Number(matriculaId),
-                    estudante_id: Number(pessoaId)
-                }
-            })
+            const matricula = await pessoasService.pegaUmaMatricula({id: Number(matriculaId), estudante_id: Number(pessoaId)})
             return res.status(200).json(matricula)
         } catch(error){
             return res.status(500).json(error.message)
@@ -138,19 +129,7 @@ class PessoaController {
         const { pessoaId, matriculaId } = req.params
         const novaMatricula = req.body
         try{
-            await database.Matriculas.update(
-                novaMatricula,
-                { where : {
-                    id: Number(matriculaId),
-                    estudante_id: Number(pessoaId)
-                }}
-            )
-            const matriculaAlterada = await database.Matriculas.findOne({
-                where: {
-                    id: Number(matriculaId),
-                    estudante_id: Number(pessoaId)
-                }
-            })
+            const matriculaAlterada = await pessoasService.alteraUmaMatricula(novaMatricula, {id: Number(matriculaId), estudante_id: Number(pessoaId)})
             return res.status(200).json(matriculaAlterada)
         } catch(error){
             return res.status(500).json(error.message)
@@ -160,12 +139,7 @@ class PessoaController {
     static async deletarUmaMatricula(req, res){
         const { pessoaId, matriculaId } = req.params
         try{
-            await database.Matriculas.destroy({
-                where: {
-                    id: Number(matriculaId),
-                    estudante_id: Number(pessoaId)
-                }
-            })
+            await pessoasService.deletaUmaMatricula({id: Number(matriculaId), estudante_id: Number(pessoaId)})
             return res.status(204).json()
         } catch(error){
             return res.status(500).json(error.message)
@@ -175,12 +149,7 @@ class PessoaController {
     static async restaurarUmaMatricula(req, res){
         const { pessoaId, matriculaId } = req.params
         try{
-            await database.Matriculas.restore({
-                where: {
-                    estudante_id: Number(pessoaId),
-                    id: Number(matriculaId)
-                }
-            })
+            await pessoasService.restauraMatricula({estudante_id: Number(pessoaId), id: Number(matriculaId)})
             return res
                 .status(200)
                 .json({message: `matricula ${matriculaId} foi restaurada`})
