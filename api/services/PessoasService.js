@@ -80,6 +80,21 @@ class PessoasService extends Services{
             having: Sequelize.literal(`count(turma_id) >= ${lotacao}`)
         })
     }
+
+    async cancelaPessoaEMatriculas(pessoaId){
+         return await database.sequelize.transaction(async cancelaPessoa => {
+            await database[this.nomeDoModelo].update(
+                {ativo: false},
+                { where: {id: Number(pessoaId)}},
+                {transaction: cancelaPessoa}
+            )
+            await database.Matriculas.update(
+                {status: 'Cancelado'},
+                { where:{estudante_id:Number(pessoaId)}},
+                {transaction: cancelaPessoa}
+            )
+        })
+    }
 }
 
 module.exports = PessoasService
