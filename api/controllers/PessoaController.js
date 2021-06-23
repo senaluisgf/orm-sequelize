@@ -163,13 +163,7 @@ class PessoaController {
     static async pegarMatriculasConfirmadas(req, res){ //modo que nao checa se o usuario existe no sistema
         const { pessoaId } = req.params
         try{
-            const matriculas = await database.Matriculas.findAll({
-                where: {
-                    estudante_id: Number(pessoaId),
-                    status: 'Confirmado'
-                }
-            })
-
+            const matriculas = await pessoasService.pegaMatriculas({estudante_id: Number(pessoaId), status: 'Confirmado'})
             return res
                 .status(200)
                 .json(matriculas)
@@ -181,15 +175,10 @@ class PessoaController {
     static async pegarMatriculasCanceladas(req, res){ //melhor jeito de fazer correlação pois há uma checagem de usuario
         const { pessoaId } = req.params
         try{
-            const pessoa = await database.Pessoas.findOne({ where: {id: Number(pessoaId) } })
-            if(pessoa){
-                const matriculas = await pessoa.getMatriculasCanceladas()
-                return res
-                    .status(200)
-                    .json(matriculas)
-            } else {
-                return res.status(404).json({error: 'usuário não cadastrado'})
-            }
+            const matriculas = await pessoasService.pegaMatriculasCanceladas(pessoaId)
+            return res
+                .status(200)
+                .json(matriculas)
         } catch(err){
             return res.status(500).json(err.message)
         }
@@ -198,31 +187,19 @@ class PessoaController {
     static async pegarMatriculasPorTurma(req, res){
         const { turmaId } = req.params
         try{
-            const {count, rows} = await database.Matriculas.findAndCountAll({
-                where: {
-                    turma_id: Number(turmaId),
-                    status: 'Confirmado'
-                },
-                limite: 20,
-                order: [['estudante_id', 'ASC']]
-            })
+            const result = await pessoasService.pegaMatriculasPorTurma(turmaId)
             return res
                 .status(200)
-                .json({count,rows})
+                .json(result)
         } catch(err){
             return res.status(500).json(err.message)
         }
     }
 
     static async pegarMatriculasLotadas(req, res){
-        const lotacao = 2
+        const lotacao = 1
         try{
-            const {count, rows} = await database.Matriculas.findAndCountAll({
-                where: {status: "Confirmado"},
-                attributes: ['turma_id'],
-                group: ['turma_id'],
-                having: Sequelize.literal(`count(turma_id) >= ${lotacao}`)
-            })
+            const {count, rows} = await pessoasService.pegaTurmasLotadas(lotacao)
 
             return res
                 .status(200)
